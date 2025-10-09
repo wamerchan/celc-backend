@@ -14,5 +14,11 @@ export declare class AuthService {
     }>;
     login(email: string, password: string): Promise<{
         token: string;
+        user: {
+            id: number;
+            nombre: string;
+            email: string;
+            rol: string;
+        };
     }>;
 }

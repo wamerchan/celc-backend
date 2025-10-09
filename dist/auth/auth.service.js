@@ -85,7 +85,19 @@ let AuthService = class AuthService {
             throw new Error('JWT_SECRET not configured');
         }
         const token = jwt.sign({ id: user.id_usuario, email: user.correo_electronico, id_rol: user.id_rol }, secret, { expiresIn: '1h' });
-        return { token };
+        return {
+            token,
+            user: {
+                id: user.id_usuario,
+                nombre: user.nombres,
+                email: user.correo_electronico,
+                rol: user.id_rol === 1
+                    ? 'Administrador'
+                    : user.id_rol === 2
+                        ? 'Técnico'
+                        : 'Empleado',
+            },
+        };
     }
 };
 exports.AuthService = AuthService;
