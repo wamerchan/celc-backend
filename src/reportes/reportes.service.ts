@@ -7,7 +7,7 @@ export class ReportesService {
 
   async getLineasReport(filters: any) {
     let sql = 'SELECT * FROM Lineas WHERE 1=1';
-    const params = [];
+    const params: any[] = [];
     if (filters.estado) {
       sql += ' AND estado = ?';
       params.push(filters.estado);
@@ -25,7 +25,7 @@ export class ReportesService {
 
   async getEquiposReport(filters: any) {
     let sql = 'SELECT * FROM Equipos WHERE 1=1';
-    const params = [];
+    const params: any[] = [];
     if (filters.estado) {
       sql += ' AND estado = ?';
       params.push(filters.estado);
@@ -43,7 +43,7 @@ export class ReportesService {
 
   async getAsignacionesReport(filters: any) {
     let sql = 'SELECT * FROM Asignaciones WHERE 1=1';
-    const params = [];
+    const params: any[] = [];
     if (filters.id_usuario) {
       sql += ' AND id_usuario = ?';
       params.push(filters.id_usuario);

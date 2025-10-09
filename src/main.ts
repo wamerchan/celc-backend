@@ -1,11 +1,46 @@
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(new ValidationPipe());
   app.enableCors();
+
+  // Configuración de Swagger
+  const config = new DocumentBuilder()
+    .setTitle('CELC API')
+    .setDescription('API para el sistema de gestión de líneas de producción CELC (Centro de Excelencia en Logística y Calidad)')
+    .setVersion('1.0')
+    .addTag('auth', 'Endpoints de autenticación y autorización')
+    .addTag('usuarios', 'Gestión de usuarios del sistema')
+    .addTag('lineas', 'Gestión de líneas de producción')
+    .addTag('equipos', 'Gestión de equipos y maquinaria')
+    .addTag('asignaciones', 'Gestión de asignaciones de equipos a líneas')
+    .addTag('revisiones', 'Gestión de revisiones y mantenimientos')
+    .addTag('reportes', 'Generación de reportes y estadísticas')
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+        name: 'JWT',
+        description: 'Enter JWT token',
+        in: 'header',
+      },
+      'JWT-auth',
+    )
+    .build();
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api', app, document, {
+    swaggerOptions: {
+      persistAuthorization: true,
+      tagsSorter: 'alpha',
+      operationsSorter: 'alpha',
+    },
+  });
+
   await app.listen(process.env.PORT ?? 3000);
 }
 void bootstrap();

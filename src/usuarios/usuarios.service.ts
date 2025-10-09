@@ -23,8 +23,8 @@ export class UsuariosService {
   }
 
   async update(id: number, data: Partial<{ nombre: string; email: string; id_rol: number }>) {
-    const fields = [];
-    const values = [];
+    const fields: string[] = [];
+    const values: any[] = [];
     if (data.nombre) { fields.push('nombre = ?'); values.push(data.nombre); }
     if (data.email) { fields.push('email = ?'); values.push(data.email); }
     if (data.id_rol) { fields.push('id_rol = ?'); values.push(data.id_rol); }
