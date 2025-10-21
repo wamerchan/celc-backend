@@ -2,11 +2,26 @@ import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
+import { AllExceptionsFilter } from './common/http-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  
+  // Global exception filter
+  app.useGlobalFilters(new AllExceptionsFilter());
+  
   app.useGlobalPipes(new ValidationPipe());
-  app.enableCors();
+  
+  // Configuración de CORS
+  app.enableCors({
+    origin: process.env.CORS_ORIGIN || [
+      'http://localhost:5173',
+      'http://localhost:3000',
+    ],
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+  });
 
   // Configuración de Swagger
   const config = new DocumentBuilder()
@@ -41,6 +56,8 @@ async function bootstrap() {
     },
   });
 
-  await app.listen(process.env.PORT ?? 3000);
+  const port = process.env.PORT ?? 3001;
+  await app.listen(port);
+  console.log(`✅ Server running on http://localhost:${port}`);
 }
 void bootstrap();

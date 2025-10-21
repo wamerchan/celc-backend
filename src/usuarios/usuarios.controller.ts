@@ -19,7 +19,13 @@ export class UsuariosController {
   @ApiResponse({ status: 401, description: 'No autorizado' })
   @ApiResponse({ status: 403, description: 'Acceso denegado' })
   async findAll(): Promise<UsuarioResponseDto[]> {
-    return this.usuariosService.findAll();
+    try {
+      const result = await this.usuariosService.findAll();
+      return result;
+    } catch (error) {
+      console.error('Error in findAll:', error);
+      throw error;
+    }
   }
 
   @Get(':id')

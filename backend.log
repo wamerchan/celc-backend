@@ -1,0 +1,82 @@
+
+> celc-backend@0.0.1 start:dev
+> nest start --watch
+
+[2J[3J[H[[90m20:41:42[0m] Starting compilation in watch mode...
+
+[[90m20:41:44[0m] Found 0 errors. Watching for file changes.
+
+[32m[Nest] 27335  - [39m20/10/2025, 20:41:44 [32m    LOG[39m [38;5;3m[NestFactory] [39m[32mStarting Nest application...[39m
+[32m[Nest] 27335  - [39m20/10/2025, 20:41:44 [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mConfigHostModule dependencies initialized[39m[38;5;3m +12ms[39m
+[32m[Nest] 27335  - [39m20/10/2025, 20:41:44 [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mAppModule dependencies initialized[39m[38;5;3m +1ms[39m
+[32m[Nest] 27335  - [39m20/10/2025, 20:41:44 [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mConfigModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 27335  - [39m20/10/2025, 20:41:44 [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mConfigModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 27335  - [39m20/10/2025, 20:41:44 [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mDatabaseModule dependencies initialized[39m[38;5;3m +1ms[39m
+[32m[Nest] 27335  - [39m20/10/2025, 20:41:44 [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mAuthModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 27335  - [39m20/10/2025, 20:41:44 [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mUsuariosModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 27335  - [39m20/10/2025, 20:41:44 [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mLineasModule dependencies initialized[39m[38;5;3m +1ms[39m
+[32m[Nest] 27335  - [39m20/10/2025, 20:41:44 [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mEquiposModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 27335  - [39m20/10/2025, 20:41:44 [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mAsignacionesModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 27335  - [39m20/10/2025, 20:41:44 [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mRevisionesModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 27335  - [39m20/10/2025, 20:41:44 [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mReportesModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 27335  - [39m20/10/2025, 20:41:44 [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mAppController {/}:[39m[38;5;3m +26ms[39m
+[32m[Nest] 27335  - [39m20/10/2025, 20:41:44 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/, GET} route[39m[38;5;3m +2ms[39m
+[32m[Nest] 27335  - [39m20/10/2025, 20:41:44 [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mAuthController {/api/auth}:[39m[38;5;3m +0ms[39m
+[32m[Nest] 27335  - [39m20/10/2025, 20:41:44 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/auth/register, POST} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 27335  - [39m20/10/2025, 20:41:44 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/auth/login, POST} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 27335  - [39m20/10/2025, 20:41:44 [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mUsuariosController {/api/usuarios}:[39m[38;5;3m +0ms[39m
+[32m[Nest] 27335  - [39m20/10/2025, 20:41:44 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/usuarios, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 27335  - [39m20/10/2025, 20:41:44 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/usuarios/:id, GET} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 27335  - [39m20/10/2025, 20:41:44 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/usuarios, POST} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 27335  - [39m20/10/2025, 20:41:44 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/usuarios/:id, PUT} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 27335  - [39m20/10/2025, 20:41:44 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/usuarios/:id, DELETE} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 27335  - [39m20/10/2025, 20:41:44 [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mLineasController {/api/lineas}:[39m[38;5;3m +0ms[39m
+[32m[Nest] 27335  - [39m20/10/2025, 20:41:44 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/lineas, GET} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 27335  - [39m20/10/2025, 20:41:44 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/lineas/:id, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 27335  - [39m20/10/2025, 20:41:44 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/lineas, POST} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 27335  - [39m20/10/2025, 20:41:44 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/lineas/:id, PUT} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 27335  - [39m20/10/2025, 20:41:44 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/lineas/:id, DELETE} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 27335  - [39m20/10/2025, 20:41:44 [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mEquiposController {/api/equipos}:[39m[38;5;3m +0ms[39m
+[32m[Nest] 27335  - [39m20/10/2025, 20:41:44 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/equipos, GET} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 27335  - [39m20/10/2025, 20:41:44 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/equipos/:id, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 27335  - [39m20/10/2025, 20:41:44 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/equipos, POST} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 27335  - [39m20/10/2025, 20:41:44 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/equipos/:id, PUT} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 27335  - [39m20/10/2025, 20:41:44 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/equipos/:id, DELETE} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 27335  - [39m20/10/2025, 20:41:44 [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mAsignacionesController {/api/asignaciones}:[39m[38;5;3m +0ms[39m
+[32m[Nest] 27335  - [39m20/10/2025, 20:41:44 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/asignaciones, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 27335  - [39m20/10/2025, 20:41:44 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/asignaciones/:id, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 27335  - [39m20/10/2025, 20:41:44 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/asignaciones, POST} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 27335  - [39m20/10/2025, 20:41:44 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/asignaciones/:id, PUT} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 27335  - [39m20/10/2025, 20:41:44 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/asignaciones/:id, DELETE} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 27335  - [39m20/10/2025, 20:41:44 [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mRevisionesController {/api/revisiones}:[39m[38;5;3m +0ms[39m
+[32m[Nest] 27335  - [39m20/10/2025, 20:41:44 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/revisiones, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 27335  - [39m20/10/2025, 20:41:44 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/revisiones/:id, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 27335  - [39m20/10/2025, 20:41:44 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/revisiones, POST} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 27335  - [39m20/10/2025, 20:41:44 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/revisiones/:id, PUT} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 27335  - [39m20/10/2025, 20:41:44 [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mReportesController {/api/reportes}:[39m[38;5;3m +0ms[39m
+[32m[Nest] 27335  - [39m20/10/2025, 20:41:44 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/reportes/lineas, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 27335  - [39m20/10/2025, 20:41:44 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/reportes/equipos, GET} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 27335  - [39m20/10/2025, 20:41:44 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/reportes/asignaciones, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 27335  - [39m20/10/2025, 20:41:44 [32m    LOG[39m [38;5;3m[NestApplication] [39m[32mNest application successfully started[39m[38;5;3m +2ms[39m
+[31m[Nest] 27335  - [39m20/10/2025, 20:41:44 [31m  ERROR[39m [38;5;3m[NestApplication] [39m[31mError: listen EADDRINUSE: address already in use :::3001[39m[38;5;3m +1ms[39m
+node:net:1939
+    const ex = new UVExceptionWithHostPort(err, 'listen', address, port);
+               ^
+
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (node:net:1939:16)
+    at listenInCluster (node:net:1996:12)
+    at Server.listen (node:net:2101:7)
+    at ExpressAdapter.listen (/Users/wmerchan/Gitlab/CELC/celc-backend/node_modules/@nestjs/platform-express/adapters/express-adapter.js:127:32)
+    at /Users/wmerchan/Gitlab/CELC/celc-backend/node_modules/@nestjs/core/nest-application.js:188:30
+    at new Promise (<anonymous>)
+    at NestApplication.listen (/Users/wmerchan/Gitlab/CELC/celc-backend/node_modules/@nestjs/core/nest-application.js:178:16)
+    at async bootstrap (/Users/wmerchan/Gitlab/CELC/celc-backend/src/main.ts:55:3) {
+  code: 'EADDRINUSE',
+  errno: -48,
+  syscall: 'listen',
+  address: '::',
+  port: 3001
+}
+
+Node.js v22.16.0

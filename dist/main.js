@@ -4,10 +4,20 @@ const core_1 = require("@nestjs/core");
 const common_1 = require("@nestjs/common");
 const swagger_1 = require("@nestjs/swagger");
 const app_module_1 = require("./app.module");
+const http_exception_filter_1 = require("./common/http-exception.filter");
 async function bootstrap() {
     const app = await core_1.NestFactory.create(app_module_1.AppModule);
+    app.useGlobalFilters(new http_exception_filter_1.AllExceptionsFilter());
     app.useGlobalPipes(new common_1.ValidationPipe());
-    app.enableCors();
+    app.enableCors({
+        origin: process.env.CORS_ORIGIN || [
+            'http://localhost:5173',
+            'http://localhost:3000',
+        ],
+        credentials: true,
+        methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+        allowedHeaders: ['Content-Type', 'Authorization'],
+    });
     const config = new swagger_1.DocumentBuilder()
         .setTitle('CELC API')
         .setDescription('API para el sistema de gestión de líneas de producción CELC (Centro de Excelencia en Logística y Calidad)')
@@ -36,7 +46,9 @@ async function bootstrap() {
             operationsSorter: 'alpha',
         },
     });
-    await app.listen(process.env.PORT ?? 3000);
+    const port = process.env.PORT ?? 3001;
+    await app.listen(port);
+    console.log(`✅ Server running on http://localhost:${port}`);
 }
 void bootstrap();
 //# sourceMappingURL=main.js.map

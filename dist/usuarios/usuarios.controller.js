@@ -25,7 +25,14 @@ let UsuariosController = class UsuariosController {
         this.usuariosService = usuariosService;
     }
     async findAll() {
-        return this.usuariosService.findAll();
+        try {
+            const result = await this.usuariosService.findAll();
+            return result;
+        }
+        catch (error) {
+            console.error('Error in findAll:', error);
+            throw error;
+        }
     }
     async findById(id) {
         return this.usuariosService.findById(+id);
