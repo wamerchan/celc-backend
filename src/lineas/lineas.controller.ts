@@ -63,4 +63,21 @@ export class LineasController {
   async delete(@Param('id') id: string): Promise<any> {
     return this.lineasService.delete(+id);
   }
+
+  @Put(':id/toggle')
+  @UseGuards(new RoleGuard([1, 2]))
+  @ApiOperation({ summary: 'Cambiar estado de una línea (Activa/Inactiva)' })
+  @ApiParam({ name: 'id', description: 'ID de la línea a cambiar', example: 1 })
+  @ApiResponse({
+    status: 200,
+    description: 'Estado de la línea actualizado',
+    type: LineaResponseDto,
+  })
+  @ApiResponse({ status: 404, description: 'Línea no encontrada' })
+  @ApiResponse({ status: 401, description: 'No autorizado' })
+  @ApiResponse({ status: 403, description: 'Acceso denegado' })
+  // Endpoint para cambiar el estado de una línea entre Activa e Inactiva - 20 de octubre de 2025 - WM Developer
+  async toggleStatus(@Param('id') id: string): Promise<any> {
+    return await this.lineasService.toggleStatus(+id);
+  }
 }

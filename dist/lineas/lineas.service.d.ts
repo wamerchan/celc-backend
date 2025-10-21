@@ -11,4 +11,5 @@ export declare class LineasService {
     delete(id: number): Promise<{
         message: string;
     }>;
+    toggleStatus(id: number): Promise<any>;
 }

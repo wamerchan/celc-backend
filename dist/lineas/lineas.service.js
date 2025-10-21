@@ -18,28 +18,61 @@ let LineasService = class LineasService {
         this.databaseService = databaseService;
     }
     async findAll() {
-        const sql = 'SELECT * FROM Lineas';
+        const sql = `
+      SELECT 
+        id_linea AS id,
+        numero_telefono AS numero,
+        operador,
+        plan_datos AS plan,
+        estado,
+        fecha_activacion,
+        fecha_vencimiento_plan,
+        descripcion
+      FROM Lineas
+    `;
         return this.databaseService.query(sql);
     }
     async findById(id) {
-        const sql = 'SELECT * FROM Lineas WHERE id = ?';
+        const sql = `
+      SELECT 
+        id_linea AS id,
+        numero_telefono AS numero,
+        operador,
+        plan_datos AS plan,
+        estado,
+        fecha_activacion,
+        fecha_vencimiento_plan,
+        descripcion
+      FROM Lineas 
+      WHERE id_linea = ?
+    `;
         const lineas = await this.databaseService.query(sql, [id]);
         return lineas[0] || null;
     }
     async create(data) {
-        const sql = 'INSERT INTO Lineas (numero, estado, fecha_creacion) VALUES (?, ?, NOW())';
-        const result = await this.databaseService.query(sql, [data.numero, data.estado]);
+        const sql = 'INSERT INTO Lineas (numero_telefono, operador, plan_datos, estado, fecha_activacion) VALUES (?, ?, ?, ?, NOW())';
+        const result = await this.databaseService.query(sql, [data.numero, data.operador, data.plan, data.estado]);
         return { id: result.insertId };
     }
     async update(id, data) {
-        const sql = 'UPDATE Lineas SET numero = ?, estado = ? WHERE id = ?';
-        await this.databaseService.query(sql, [data.numero, data.estado, id]);
+        const sql = 'UPDATE Lineas SET numero_telefono = ?, operador = ?, plan_datos = ?, estado = ? WHERE id_linea = ?';
+        await this.databaseService.query(sql, [data.numero, data.operador, data.plan, data.estado, id]);
         return this.findById(id);
     }
     async delete(id) {
-        const sql = 'DELETE FROM Lineas WHERE id = ?';
+        const sql = 'DELETE FROM Lineas WHERE id_linea = ?';
         await this.databaseService.query(sql, [id]);
         return { message: 'Línea eliminada' };
+    }
+    async toggleStatus(id) {
+        const linea = await this.findById(id);
+        if (!linea) {
+            throw new Error('Línea no encontrada');
+        }
+        const nuevoEstado = linea.estado === 'Activa' ? 'Inactiva' : 'Activa';
+        const sql = 'UPDATE Lineas SET estado = ? WHERE id_linea = ?';
+        await this.databaseService.query(sql, [nuevoEstado, id]);
+        return this.findById(id);
     }
 };
 exports.LineasService = LineasService;

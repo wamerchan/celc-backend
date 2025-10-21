@@ -8,4 +8,5 @@ export declare class LineasController {
     create(body: CreateLineaDto): Promise<any>;
     update(id: string, body: UpdateLineaDto): Promise<any>;
     delete(id: string): Promise<any>;
+    toggleStatus(id: string): Promise<any>;
 }

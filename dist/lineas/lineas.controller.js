@@ -39,6 +39,9 @@ let LineasController = class LineasController {
     async delete(id) {
         return this.lineasService.delete(+id);
     }
+    async toggleStatus(id) {
+        return await this.lineasService.toggleStatus(+id);
+    }
 };
 exports.LineasController = LineasController;
 __decorate([
@@ -103,6 +106,24 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], LineasController.prototype, "delete", null);
+__decorate([
+    (0, common_1.Put)(':id/toggle'),
+    (0, common_1.UseGuards)(new role_guard_1.RoleGuard([1, 2])),
+    (0, swagger_1.ApiOperation)({ summary: 'Cambiar estado de una línea (Activa/Inactiva)' }),
+    (0, swagger_1.ApiParam)({ name: 'id', description: 'ID de la línea a cambiar', example: 1 }),
+    (0, swagger_1.ApiResponse)({
+        status: 200,
+        description: 'Estado de la línea actualizado',
+        type: lineas_dto_1.LineaResponseDto,
+    }),
+    (0, swagger_1.ApiResponse)({ status: 404, description: 'Línea no encontrada' }),
+    (0, swagger_1.ApiResponse)({ status: 401, description: 'No autorizado' }),
+    (0, swagger_1.ApiResponse)({ status: 403, description: 'Acceso denegado' }),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], LineasController.prototype, "toggleStatus", null);
 exports.LineasController = LineasController = __decorate([
     (0, swagger_1.ApiTags)('lineas'),
     (0, swagger_1.ApiBearerAuth)('JWT-auth'),
