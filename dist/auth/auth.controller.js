@@ -17,6 +17,7 @@ const common_1 = require("@nestjs/common");
 const swagger_1 = require("@nestjs/swagger");
 const auth_service_1 = require("./auth.service");
 const auth_dto_1 = require("./auth.dto");
+const jwt_guard_1 = require("./jwt.guard");
 let AuthController = class AuthController {
     authService;
     constructor(authService) {
@@ -27,6 +28,12 @@ let AuthController = class AuthController {
     }
     async login(body) {
         return this.authService.login(body.email, body.password);
+    }
+    async verify(req) {
+        return {
+            valid: true,
+            user: req.user,
+        };
     }
 };
 exports.AuthController = AuthController;
@@ -50,6 +57,18 @@ __decorate([
     __metadata("design:paramtypes", [auth_dto_1.LoginDto]),
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "login", null);
+__decorate([
+    (0, common_1.Get)('verify'),
+    (0, common_1.UseGuards)(jwt_guard_1.JwtGuard),
+    (0, swagger_1.ApiBearerAuth)('JWT-auth'),
+    (0, swagger_1.ApiOperation)({ summary: 'Verificar token JWT' }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'Token válido' }),
+    (0, swagger_1.ApiResponse)({ status: 401, description: 'Token inválido o expirado' }),
+    __param(0, (0, common_1.Request)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], AuthController.prototype, "verify", null);
 exports.AuthController = AuthController = __decorate([
     (0, swagger_1.ApiTags)('auth'),
     (0, common_1.Controller)('api/auth'),

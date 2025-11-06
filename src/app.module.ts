@@ -10,6 +10,7 @@ import { EquiposModule } from './equipos/equipos.module';
 import { AsignacionesModule } from './asignaciones/asignaciones.module';
 import { RevisionesModule } from './revisiones/revisiones.module';
 import { ReportesModule } from './reportes/reportes.module';
+import { MetricasModule } from './metricas/metricas.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { ReportesModule } from './reportes/reportes.module';
     AsignacionesModule,
     RevisionesModule,
     ReportesModule,
+    MetricasModule,
   ],
   controllers: [AppController],
   providers: [AppService],

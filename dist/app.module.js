@@ -19,6 +19,7 @@ const equipos_module_1 = require("./equipos/equipos.module");
 const asignaciones_module_1 = require("./asignaciones/asignaciones.module");
 const revisiones_module_1 = require("./revisiones/revisiones.module");
 const reportes_module_1 = require("./reportes/reportes.module");
+const metricas_module_1 = require("./metricas/metricas.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -36,6 +37,7 @@ exports.AppModule = AppModule = __decorate([
             asignaciones_module_1.AsignacionesModule,
             revisiones_module_1.RevisionesModule,
             reportes_module_1.ReportesModule,
+            metricas_module_1.MetricasModule,
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],

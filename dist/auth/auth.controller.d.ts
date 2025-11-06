@@ -15,4 +15,8 @@ export declare class AuthController {
             rol: string;
         };
     }>;
+    verify(req: any): Promise<{
+        valid: boolean;
+        user: any;
+    }>;
 }
