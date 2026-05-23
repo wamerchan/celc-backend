@@ -1,0 +1,140 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+model Asignacion {
+  id                 Int       @id @default(autoincrement()) @map("id_asignacion")
+  usuarioId          Int       @map("id_usuario")
+  equipoId           Int?      @map("id_equipo")
+  lineaId            Int?      @map("id_linea")
+  fechaAsignacion    DateTime  @default(now()) @db.DateTime(0) @map("fecha_asignacion")
+  fechaDesasignacion DateTime? @db.DateTime(0) @map("fecha_desasignacion")
+  observaciones      String?   @db.Text
+  usuario            Usuario   @relation(fields: [usuarioId], references: [id], onUpdate: Restrict, map: "asignaciones_ibfk_1")
+  equipo             Equipo?   @relation(fields: [equipoId], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "asignaciones_ibfk_2")
+  linea              Linea?    @relation(fields: [lineaId], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "asignaciones_ibfk_3")
+
+  @@index([equipoId], map: "idx_asignaciones_equipo")
+  @@index([lineaId], map: "idx_asignaciones_linea")
+  @@index([usuarioId], map: "idx_asignaciones_usuario")
+  @@map("Asignaciones")
+}
+
+model Equipo {
+  id               Int             @id @default(autoincrement()) @map("id_equipo")
+  marca            String          @db.VarChar(100)
+  modelo           String          @db.VarChar(100)
+  numeroSerie      String          @unique(map: "numero_serie") @map("numero_serie") @db.VarChar(100)
+  imei             String?         @unique(map: "imei") @db.VarChar(100)
+  estado           EquiposEstado?  @default(Disponible)
+  fechaAdquisicion DateTime?       @db.Date @map("fecha_adquisicion")
+  descripcion      String?         @db.Text
+  asignaciones     Asignacion[]
+  revisiones       Revision[]
+
+  @@index([numeroSerie], map: "idx_equipos_serie")
+  @@map("Equipos")
+}
+
+model Linea {
+  id                   Int            @id @default(autoincrement()) @map("id_linea")
+  numeroTelefono       String         @unique(map: "numero_telefono") @map("numero_telefono") @db.VarChar(20)
+  operador             String         @db.VarChar(100)
+  planDatos            String?        @map("plan_datos") @db.VarChar(100)
+  estado               LineasEstado?  @default(Activa)
+  fechaActivacion      DateTime?      @db.Date @map("fecha_activacion")
+  fechaVencimientoPlan DateTime?      @db.Date @map("fecha_vencimiento_plan")
+  descripcion          String?        @db.Text
+  asignaciones         Asignacion[]
+
+  @@index([numeroTelefono], map: "idx_lineas_numero")
+  @@map("Lineas")
+}
+
+model RegistroError {
+  id             Int       @id @default(autoincrement()) @map("id_registro_error")
+  tipoError      String    @map("tipo_error") @db.VarChar(100)
+  descripcion    String    @map("descripcion_error") @db.Text
+  fechaHora      DateTime  @default(now()) @db.Timestamp(0) @map("fecha_hora")
+  usuarioId      Int?      @map("id_usuario")
+  ipOrigen       String?   @map("ip_origen") @db.VarChar(45)
+  moduloAfectado String?   @map("modulo_afectado") @db.VarChar(100)
+  usuario        Usuario?  @relation(fields: [usuarioId], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "registroerrores_ibfk_1")
+
+  @@index([usuarioId], map: "id_usuario")
+  @@index([fechaHora], map: "idx_errores_fecha")
+  @@map("RegistroErrores")
+}
+
+model Revision {
+  id                  Int                  @id @default(autoincrement()) @map("id_revision")
+  equipoId            Int                  @map("id_equipo")
+  fechaProgramada     DateTime             @db.Date @map("fecha_programada")
+  fechaRealizada      DateTime?            @db.Date @map("fecha_realizada")
+  resultado           RevisionesResultado?
+  observaciones       String?              @db.Text
+  realizadaPorUsuario Int?                 @map("realizada_por_usuario")
+  equipo              Equipo               @relation(fields: [equipoId], references: [id], onUpdate: Restrict, map: "revisiones_ibfk_1")
+  usuario             Usuario?             @relation(fields: [realizadaPorUsuario], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "revisiones_ibfk_2")
+
+  @@index([equipoId], map: "idx_revisiones_equipo")
+  @@index([realizadaPorUsuario], map: "realizada_por_usuario")
+  @@map("Revisiones")
+}
+
+model Rol {
+  id          Int       @id @default(autoincrement()) @map("id_rol")
+  nombreRol   String    @unique(map: "nombre_rol") @map("nombre_rol") @db.VarChar(50)
+  descripcion String?   @db.Text
+  usuarios    Usuario[]
+
+  @@map("Roles")
+}
+
+model Usuario {
+  id                Int               @id @default(autoincrement()) @map("id_usuario")
+  nombres           String            @db.VarChar(100)
+  apellidos         String            @db.VarChar(100)
+  cedula            String            @unique(map: "cedula") @db.VarChar(20)
+  fechaNacimiento   DateTime?         @db.Date @map("fecha_nacimiento")
+  correoElectronico String            @unique(map: "correo_electronico") @map("correo_electronico") @db.VarChar(255)
+  contrasenaHash    String            @map("contrasena_hash") @db.VarChar(255)
+  rolId             Int               @map("id_rol")
+  fechaCreacion     DateTime          @default(now()) @db.Timestamp(0) @map("fecha_creacion")
+  ultimoLogin       DateTime?         @db.Timestamp(0) @map("ultimo_login")
+  activo            Boolean?          @default(true)
+  asignaciones      Asignacion[]
+  registroErrores   RegistroError[]
+  revisiones        Revision[]
+  rol               Rol               @relation(fields: [rolId], references: [id], onUpdate: Restrict, map: "usuarios_ibfk_1")
+
+  @@index([rolId], map: "id_rol")
+  @@index([correoElectronico], map: "idx_usuarios_correo")
+  @@map("Usuarios")
+}
+
+enum LineasEstado {
+  Activa
+  Inactiva
+  Suspendida
+  @@map("Lineas_estado")
+}
+
+enum RevisionesResultado {
+  Aprobada
+  Reparacion_Necesaria @map("Reparacion Necesaria")
+  Rechazada
+  @@map("Revisiones_resultado")
+}
+
+enum EquiposEstado {
+  Disponible
+  Asignado
+  En_Mantenimiento @map("En Mantenimiento")
+  Baja
+  @@map("Equipos_estado")
+}

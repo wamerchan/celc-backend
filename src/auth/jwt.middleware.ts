@@ -15,10 +15,17 @@ export class JwtMiddleware implements NestMiddleware {
     const token = authHeader.substring(7);
     try {
       const secret = this.configService.get<string>('JWT_SECRET');
+      if (!secret) {
+        throw new UnauthorizedException('JWT_SECRET no configurado');
+      }
       const decoded = (jwt as any).verify(token, secret);
       (req as any).user = decoded;
       next();
     } catch (error) {
+      console.warn('JwtMiddleware token verificación fallida:', {
+        message: error?.message || 'unknown',
+        token: token?.slice(0, 8) + '...'
+      });
       throw new UnauthorizedException('Token inválido');
     }
   }

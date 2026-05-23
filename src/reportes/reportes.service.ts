@@ -6,64 +6,50 @@ export class ReportesService {
   constructor(private databaseService: DatabaseService) {}
 
   async getLineasReport(filters: any) {
-    let sql = 'SELECT * FROM Lineas WHERE 1=1';
-    const params: any[] = [];
+    const where: any = {};
     if (filters.estado) {
-      sql += ' AND estado = ?';
-      params.push(filters.estado);
+      where.estado = filters.estado;
     }
     if (filters.fecha_desde) {
-      sql += ' AND fecha_creacion >= ?';
-      params.push(filters.fecha_desde);
+      where.fechaActivacion = { ...where.fechaActivacion, gte: new Date(filters.fecha_desde) };
     }
     if (filters.fecha_hasta) {
-      sql += ' AND fecha_creacion <= ?';
-      params.push(filters.fecha_hasta);
+      where.fechaActivacion = { ...where.fechaActivacion, lte: new Date(filters.fecha_hasta) };
     }
-    return this.databaseService.query(sql, params);
+    return this.databaseService.linea.findMany({ where });
   }
 
   async getEquiposReport(filters: any) {
-    let sql = 'SELECT * FROM Equipos WHERE 1=1';
-    const params: any[] = [];
+    const where: any = {};
     if (filters.estado) {
-      sql += ' AND estado = ?';
-      params.push(filters.estado);
+      where.estado = filters.estado;
     }
     if (filters.fecha_desde) {
-      sql += ' AND fecha_adquisicion >= ?';
-      params.push(filters.fecha_desde);
+      where.fechaAdquisicion = { ...where.fechaAdquisicion, gte: new Date(filters.fecha_desde) };
     }
     if (filters.fecha_hasta) {
-      sql += ' AND fecha_adquisicion <= ?';
-      params.push(filters.fecha_hasta);
+      where.fechaAdquisicion = { ...where.fechaAdquisicion, lte: new Date(filters.fecha_hasta) };
     }
-    return this.databaseService.query(sql, params);
+    return this.databaseService.equipo.findMany({ where });
   }
 
   async getAsignacionesReport(filters: any) {
-    let sql = 'SELECT * FROM Asignaciones WHERE 1=1';
-    const params: any[] = [];
+    const where: any = {};
     if (filters.id_usuario) {
-      sql += ' AND id_usuario = ?';
-      params.push(filters.id_usuario);
+      where.usuarioId = Number(filters.id_usuario);
     }
     if (filters.id_equipo) {
-      sql += ' AND id_equipo = ?';
-      params.push(filters.id_equipo);
+      where.equipoId = Number(filters.id_equipo);
     }
     if (filters.id_linea) {
-      sql += ' AND id_linea = ?';
-      params.push(filters.id_linea);
+      where.lineaId = Number(filters.id_linea);
     }
     if (filters.fecha_desde) {
-      sql += ' AND fecha_asignacion >= ?';
-      params.push(filters.fecha_desde);
+      where.fechaAsignacion = { ...where.fechaAsignacion, gte: new Date(filters.fecha_desde) };
     }
     if (filters.fecha_hasta) {
-      sql += ' AND fecha_asignacion <= ?';
-      params.push(filters.fecha_hasta);
+      where.fechaAsignacion = { ...where.fechaAsignacion, lte: new Date(filters.fecha_hasta) };
     }
-    return this.databaseService.query(sql, params);
+    return this.databaseService.asignacion.findMany({ where });
   }
 }

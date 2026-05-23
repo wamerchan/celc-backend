@@ -3,7 +3,12 @@ import * as bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
 import { DatabaseService } from '../database/database.service';
 import { ConfigService } from '@nestjs/config';
-import { User } from './user.interface';
+
+const ROLE_MAP: Record<number, string> = {
+  1: 'Administrador',
+  2: 'Técnico',
+  3: 'Empleado',
+};
 
 @Injectable()
 export class AuthService {
@@ -17,56 +22,89 @@ export class AuthService {
     email: string;
     password: string;
     id_rol: number;
+    cedula?: string;
   }) {
-    const hashedPassword: string = await (bcrypt as any).hash(userData.password, 10);
-    const sql =
-      'INSERT INTO Usuarios (nombres, apellidos, correo_electronico, contrasena_hash, id_rol, fecha_creacion) VALUES (?, ?, ?, ?, ?, NOW())';
-    await this.databaseService.query(sql, [
-      userData.nombre,
-      '',
-      userData.email,
-      hashedPassword,
-      userData.id_rol,
-    ]);
+    const hashedPassword = await bcrypt.hash(userData.password, 10);
+    await this.databaseService.usuario.create({
+      data: {
+        nombres: userData.nombre,
+        apellidos: '',
+        correoElectronico: userData.email,
+        contrasenaHash: hashedPassword,
+        rolId: userData.id_rol,
+        cedula: userData.cedula || Date.now().toString(),
+      }
+    });
     return { message: 'Usuario registrado exitosamente' };
   }
 
   async login(email: string, password: string) {
-    const sql = 'SELECT * FROM Usuarios WHERE correo_electronico = ?';
-    const users: User[] = await this.databaseService.query(sql, [email]) as User[];
-    if (users.length === 0) {
+    const user = await this.databaseService.usuario.findUnique({
+      where: { correoElectronico: email }
+    });
+
+    if (!user) {
       throw new UnauthorizedException('Credenciales inválidas');
     }
-    const user = users[0];
-    const isPasswordValid: boolean = await (bcrypt as any).compare(password, user.contrasena_hash);
+    
+    const isPasswordValid = await bcrypt.compare(password, user.contrasenaHash);
     if (!isPasswordValid) {
       throw new UnauthorizedException('Credenciales inválidas');
     }
+    
     // Actualizar ultimo_login
-    const updateSql = 'UPDATE Usuarios SET ultimo_login = NOW() WHERE id_usuario = ?';
-    await this.databaseService.query(updateSql, [user.id_usuario]);
+    await this.databaseService.usuario.update({
+      where: { id: user.id },
+      data: { ultimoLogin: new Date() }
+    });
+    
     const secret = this.configService.get<string>('JWT_SECRET');
     if (!secret) {
       throw new Error('JWT_SECRET not configured');
     }
-    const token: string = (jwt as any).sign(
-      { id: user.id_usuario, email: user.correo_electronico, id_rol: user.id_rol },
+    
+    const token = jwt.sign(
+      { id: user.id, email: user.correoElectronico, id_rol: user.rolId },
       secret,
-      { expiresIn: '1h' },
+      { expiresIn: '8h' },
     );
+    
     return {
       token,
-      user: {
-        id: user.id_usuario,
-        nombre: user.nombres,
-        email: user.correo_electronico,
-        rol:
-          user.id_rol === 1
-            ? 'Administrador'
-            : user.id_rol === 2
-              ? 'Técnico'
-              : 'Empleado',
-      },
+      user: this.buildUserProfile(user),
+    };
+  }
+
+  /**
+   * Retorna el perfil completo del usuario por ID.
+   * Mismo formato que el objeto `user` retornado por login.
+   */
+  async getProfile(userId: number) {
+    const user = await this.databaseService.usuario.findUnique({
+      where: { id: userId },
+    });
+
+    if (!user) {
+      throw new UnauthorizedException('Usuario no encontrado');
+    }
+
+    return this.buildUserProfile(user);
+  }
+
+  private buildUserProfile(user: {
+    id: number;
+    nombres: string;
+    apellidos: string;
+    correoElectronico: string;
+    rolId: number;
+  }) {
+    return {
+      id: user.id,
+      nombres: user.nombres,
+      apellidos: user.apellidos,
+      email: user.correoElectronico,
+      rol: ROLE_MAP[user.rolId] ?? 'Empleado',
+      rolId: user.rolId,
     };
   }
 }

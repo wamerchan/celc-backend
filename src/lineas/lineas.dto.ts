@@ -1,68 +1,128 @@
-import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsString, IsEnum, IsDateString } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+
+export enum LineasEstado {
+  Activa = 'Activa',
+  Inactiva = 'Inactiva',
+  Suspendida = 'Suspendida'
+}
 
 export class CreateLineaDto {
   @ApiProperty({
-    description: 'Nombre de la línea de producción',
-    example: 'Línea de Ensamblaje 1',
+    description: 'Número de teléfono de la línea',
+    example: '3001234567',
   })
   @IsString()
   @IsNotEmpty()
-  nombre: string;
+  numeroTelefono: string;
 
   @ApiProperty({
-    description: 'Descripción de la línea',
-    example: 'Línea dedicada al ensamblaje de productos electrónicos',
+    description: 'Operador de la línea (Ej: Claro, Movistar, Tigo)',
+    example: 'Claro',
   })
   @IsString()
   @IsNotEmpty()
-  descripcion: string;
+  operador: string;
 
-  @ApiProperty({
-    description: 'Ubicación de la línea',
-    example: 'Planta Norte, Sector A',
+  @ApiPropertyOptional({
+    description: 'Plan de datos o voz asociado',
+    example: 'Plan 50GB Navegación',
   })
+  @IsOptional()
   @IsString()
-  @IsNotEmpty()
-  ubicacion: string;
+  planDatos?: string | null;
+
+  @ApiPropertyOptional({
+    description: 'Estado de la línea',
+    example: 'Activa',
+    enum: LineasEstado,
+  })
+  @IsOptional()
+  @IsEnum(LineasEstado)
+  estado?: LineasEstado;
+
+  @ApiPropertyOptional({
+    description: 'Fecha de activación',
+    example: '2023-10-01T10:00:00Z',
+  })
+  @IsOptional()
+  @IsDateString()
+  fechaActivacion?: Date | null;
+
+  @ApiPropertyOptional({
+    description: 'Fecha de vencimiento del plan',
+    example: '2024-10-01T10:00:00Z',
+  })
+  @IsOptional()
+  @IsDateString()
+  fechaVencimientoPlan?: Date | null;
+
+  @ApiPropertyOptional({
+    description: 'Descripción adicional',
+    example: 'Línea asignada al área de ventas',
+  })
+  @IsOptional()
+  @IsString()
+  descripcion?: string | null;
 }
 
 export class UpdateLineaDto {
   @ApiPropertyOptional({
-    description: 'Nombre de la línea de producción',
-    example: 'Línea de Ensamblaje 1',
+    description: 'Número de teléfono de la línea',
+    example: '3001234567',
   })
   @IsOptional()
   @IsString()
-  @IsNotEmpty()
-  nombre?: string;
+  numeroTelefono?: string;
 
   @ApiPropertyOptional({
-    description: 'Descripción de la línea',
-    example: 'Línea dedicada al ensamblaje de productos electrónicos',
+    description: 'Operador de la línea',
+    example: 'Claro',
   })
   @IsOptional()
   @IsString()
-  @IsNotEmpty()
-  descripcion?: string;
+  operador?: string;
 
   @ApiPropertyOptional({
-    description: 'Ubicación de la línea',
-    example: 'Planta Norte, Sector A',
+    description: 'Plan de datos o voz',
+    example: 'Plan 50GB Navegación',
   })
   @IsOptional()
   @IsString()
-  @IsNotEmpty()
-  ubicacion?: string;
+  planDatos?: string | null;
 
   @ApiPropertyOptional({
-    description: 'Estado de la línea (1: Activa, 0: Inactiva)',
-    example: 1,
-    enum: [0, 1],
+    description: 'Estado de la línea',
+    example: 'Activa',
+    enum: LineasEstado,
   })
   @IsOptional()
-  @IsNumber()
-  estado?: number;
+  @IsEnum(LineasEstado)
+  estado?: LineasEstado;
+
+  @ApiPropertyOptional({
+    description: 'Fecha de activación',
+    example: '2023-10-01T10:00:00Z',
+  })
+  @IsOptional()
+  @IsDateString()
+  fechaActivacion?: Date | null;
+
+  @ApiPropertyOptional({
+    description: 'Fecha de vencimiento del plan',
+    example: '2024-10-01T10:00:00Z',
+  })
+  @IsOptional()
+  @IsDateString()
+  fechaVencimientoPlan?: Date | null;
+
+  @ApiPropertyOptional({
+    description: 'Descripción adicional',
+    example: 'Línea asignada al área de ventas',
+  })
+  @IsOptional()
+  @IsString()
+  descripcion?: string | null;
 }
 
 export class LineaResponseDto {
@@ -73,32 +133,44 @@ export class LineaResponseDto {
   id: number;
 
   @ApiProperty({
-    description: 'Nombre de la línea de producción',
-    example: 'Línea de Ensamblaje 1',
+    description: 'Número de teléfono de la línea',
+    example: '3001234567',
   })
-  nombre: string;
+  numeroTelefono: string;
 
   @ApiProperty({
-    description: 'Descripción de la línea',
-    example: 'Línea dedicada al ensamblaje de productos electrónicos',
+    description: 'Operador de la línea',
+    example: 'Claro',
   })
-  descripcion: string;
+  operador: string;
 
-  @ApiProperty({
-    description: 'Ubicación de la línea',
-    example: 'Planta Norte, Sector A',
+  @ApiPropertyOptional({
+    description: 'Plan de datos o voz asociado',
+    example: 'Plan 50GB Navegación',
   })
-  ubicacion: string;
+  planDatos?: string | null;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     description: 'Estado de la línea',
-    example: 1,
+    example: 'Activa',
   })
-  estado: number;
+  estado?: string | null;
 
-  @ApiProperty({
-    description: 'Fecha de creación de la línea',
+  @ApiPropertyOptional({
+    description: 'Fecha de activación',
     example: '2023-10-01T10:00:00Z',
   })
-  fecha_creacion: Date;
+  fechaActivacion?: Date | null;
+
+  @ApiPropertyOptional({
+    description: 'Fecha de vencimiento del plan',
+    example: '2024-10-01T10:00:00Z',
+  })
+  fechaVencimientoPlan?: Date | null;
+
+  @ApiPropertyOptional({
+    description: 'Descripción adicional',
+    example: 'Línea asignada al área de ventas',
+  })
+  descripcion?: string | null;
 }

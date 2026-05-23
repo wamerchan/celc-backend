@@ -6,25 +6,49 @@ export class RevisionesService {
   constructor(private databaseService: DatabaseService) {}
 
   async findAll() {
-    const sql = 'SELECT * FROM Revisiones';
-    return this.databaseService.query(sql);
+    return this.databaseService.revision.findMany({
+      include: {
+        equipo: true,
+        usuario: true
+      }
+    });
   }
 
   async findById(id: number) {
-    const sql = 'SELECT * FROM Revisiones WHERE id = ?';
-    const revisiones = await this.databaseService.query(sql, [id]);
-    return revisiones[0] || null;
+    return this.databaseService.revision.findUnique({
+      where: { id },
+      include: {
+        equipo: true,
+        usuario: true
+      }
+    });
   }
 
   async create(data: any) {
-    const sql = 'INSERT INTO Revisiones (id_equipo, id_tecnico, fecha_programada, estado) VALUES (?, ?, ?, ?)';
-    const result = await this.databaseService.query(sql, [data.id_equipo, data.id_tecnico, data.fecha_programada, data.estado]);
-    return { id: (result as any).insertId };
+    const revision = await this.databaseService.revision.create({
+      data: {
+        equipoId: data.id_equipo,
+        realizadaPorUsuario: data.id_tecnico,
+        fechaProgramada: new Date(data.fecha_programada),
+        resultado: data.estado || undefined,
+        observaciones: data.resultados || undefined
+      }
+    });
+    return { id: revision.id };
   }
 
   async update(id: number, data: any) {
-    const sql = 'UPDATE Revisiones SET id_equipo = ?, id_tecnico = ?, fecha_programada = ?, estado = ?, resultados = ? WHERE id = ?';
-    await this.databaseService.query(sql, [data.id_equipo, data.id_tecnico, data.fecha_programada, data.estado, data.resultados, id]);
+    await this.databaseService.revision.update({
+      where: { id },
+      data: {
+        equipoId: data.id_equipo,
+        realizadaPorUsuario: data.id_tecnico,
+        fechaProgramada: data.fecha_programada ? new Date(data.fecha_programada) : undefined,
+        fechaRealizada: data.fecha_realizada ? new Date(data.fecha_realizada) : undefined,
+        resultado: data.estado || undefined,
+        observaciones: data.resultados || undefined
+      }
+    });
     return this.findById(id);
   }
 }

@@ -5,50 +5,41 @@ import { DatabaseService } from '../database/database.service';
 export class MetricasService {
   constructor(private databaseService: DatabaseService) {}
 
-  // Servicio para obtener métricas del dashboard - 23 de octubre de 2025 - WM Developer
-
   async getTotalActiveLines() {
-    const sql = `
-      SELECT COUNT(*) as total
-      FROM Lineas
-      WHERE estado = 'Activa'
-    `;
-    const result: any = await this.databaseService.query(sql);
+    const total = await this.databaseService.linea.count({
+      where: { estado: 'Activa' }
+    });
     return {
-      total: result[0]?.total || 0,
+      total,
       label: 'Líneas Activas',
     };
   }
 
   async getEquipmentsInRepair() {
-    const sql = `
-      SELECT COUNT(*) as total
-      FROM Equipos
-      WHERE estado = 'En Reparación'
-    `;
-    const result: any = await this.databaseService.query(sql);
+    // "En Reparación" isn't in EquiposEstado, map it to En_Mantenimiento
+    const total = await this.databaseService.equipo.count({
+      where: { estado: 'En_Mantenimiento' }
+    });
     return {
-      total: result[0]?.total || 0,
+      total,
       label: 'Equipos en Reparación',
     };
   }
 
   async getUpcomingReviews() {
-    const sql = `
-      SELECT COUNT(*) as total
-      FROM Revisiones
-      WHERE fecha_programada > NOW()
-      AND realizada_por_usuario IS NULL
-    `;
-    const result: any = await this.databaseService.query(sql);
+    const total = await this.databaseService.revision.count({
+      where: {
+        fechaProgramada: { gt: new Date() },
+        realizadaPorUsuario: null
+      }
+    });
     return {
-      total: result[0]?.total || 0,
+      total,
       label: 'Revisiones Próximas',
     };
   }
 
   async getDashboardStats() {
-    // Obtiene todas las métricas del dashboard - 23 de octubre de 2025 - WM Developer
     const [activeLines, equipmentsInRepair, upcomingReviews] = await Promise.all([
       this.getTotalActiveLines(),
       this.getEquipmentsInRepair(),

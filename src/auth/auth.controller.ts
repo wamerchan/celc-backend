@@ -28,14 +28,16 @@ export class AuthController {
   @Get('verify')
   @UseGuards(JwtGuard)
   @ApiBearerAuth('JWT-auth')
-  @ApiOperation({ summary: 'Verificar token JWT' })
-  @ApiResponse({ status: 200, description: 'Token válido' })
+  @ApiOperation({ summary: 'Verificar token JWT y retornar perfil completo' })
+  @ApiResponse({ status: 200, description: 'Token válido, retorna usuario completo' })
   @ApiResponse({ status: 401, description: 'Token inválido o expirado' })
-  // Endpoint para verificar que el token JWT es válido - 23 de octubre de 2025 - WM Developer
   async verify(@Request() req: any) {
+    // req.user contiene el payload del JWT: { id, email, id_rol }
+    // Consultamos la DB para retornar el mismo perfil que /login
+    const user = await this.authService.getProfile(req.user.id);
     return {
       valid: true,
-      user: req.user,
+      user,
     };
   }
 }

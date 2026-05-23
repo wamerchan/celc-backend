@@ -13,11 +13,19 @@ export class LineasController {
   constructor(private readonly lineasService: LineasService) {}
 
   @Get()
-  @ApiOperation({ summary: 'Obtener todas las líneas de producción' })
+  @ApiOperation({ summary: 'Obtener todas las líneas celulares' })
   @ApiResponse({ status: 200, description: 'Lista de líneas', type: [LineaResponseDto] })
   @ApiResponse({ status: 401, description: 'No autorizado' })
   async findAll(): Promise<LineaResponseDto[]> {
-    return this.lineasService.findAll();
+    const lineas = await this.lineasService.findAll();
+    return lineas.map(linea => ({
+      ...linea,
+      planDatos: linea.planDatos ?? undefined,
+      estado: linea.estado ?? undefined,
+      descripcion: linea.descripcion ?? undefined,
+      fechaActivacion: linea.fechaActivacion ?? undefined,
+      fechaVencimientoPlan: linea.fechaVencimientoPlan ?? undefined
+    }));
   }
 
   @Get(':id')
@@ -27,12 +35,21 @@ export class LineasController {
   @ApiResponse({ status: 404, description: 'Línea no encontrada' })
   @ApiResponse({ status: 401, description: 'No autorizado' })
   async findById(@Param('id') id: string): Promise<LineaResponseDto | null> {
-    return this.lineasService.findById(+id);
+    const linea = await this.lineasService.findById(+id);
+    if (!linea) return null;
+    return {
+      ...linea,
+      planDatos: linea.planDatos ?? undefined,
+      estado: linea.estado ?? undefined,
+      descripcion: linea.descripcion ?? undefined,
+      fechaActivacion: linea.fechaActivacion ?? undefined,
+      fechaVencimientoPlan: linea.fechaVencimientoPlan ?? undefined
+    };
   }
 
   @Post()
   @UseGuards(new RoleGuard([1, 2])) // Admin o Técnico
-  @ApiOperation({ summary: 'Crear una nueva línea de producción' })
+  @ApiOperation({ summary: 'Crear una nueva línea celular' })
   @ApiResponse({ status: 201, description: 'Línea creada exitosamente', type: LineaResponseDto })
   @ApiResponse({ status: 400, description: 'Datos inválidos' })
   @ApiResponse({ status: 401, description: 'No autorizado' })
@@ -42,7 +59,7 @@ export class LineasController {
   }
 
   @Put(':id')
-  @ApiOperation({ summary: 'Actualizar una línea de producción' })
+  @ApiOperation({ summary: 'Actualizar una línea celular' })
   @ApiParam({ name: 'id', description: 'ID de la línea a actualizar', example: 1 })
   @ApiResponse({ status: 200, description: 'Línea actualizada', type: LineaResponseDto })
   @ApiResponse({ status: 400, description: 'Datos inválidos' })
@@ -54,7 +71,7 @@ export class LineasController {
 
   @Delete(':id')
   @UseGuards(new RoleGuard([1, 2]))
-  @ApiOperation({ summary: 'Eliminar una línea de producción' })
+  @ApiOperation({ summary: 'Eliminar una línea celular' })
   @ApiParam({ name: 'id', description: 'ID de la línea a eliminar', example: 1 })
   @ApiResponse({ status: 200, description: 'Línea eliminada exitosamente' })
   @ApiResponse({ status: 404, description: 'Línea no encontrada' })
@@ -66,7 +83,7 @@ export class LineasController {
 
   @Put(':id/toggle')
   @UseGuards(new RoleGuard([1, 2]))
-  @ApiOperation({ summary: 'Cambiar estado de una línea (Activa/Inactiva)' })
+  @ApiOperation({ summary: 'Cambiar estado de una línea (Activa/Inactiva/Suspendida)' })
   @ApiParam({ name: 'id', description: 'ID de la línea a cambiar', example: 1 })
   @ApiResponse({
     status: 200,
@@ -76,8 +93,16 @@ export class LineasController {
   @ApiResponse({ status: 404, description: 'Línea no encontrada' })
   @ApiResponse({ status: 401, description: 'No autorizado' })
   @ApiResponse({ status: 403, description: 'Acceso denegado' })
-  // Endpoint para cambiar el estado de una línea entre Activa e Inactiva - 20 de octubre de 2025 - WM Developer
   async toggleStatus(@Param('id') id: string): Promise<any> {
-    return await this.lineasService.toggleStatus(+id);
+    const linea = await this.lineasService.toggleStatus(+id);
+    if (!linea) return null;
+    return {
+      ...linea,
+      planDatos: linea.planDatos ?? undefined,
+      estado: linea.estado ?? undefined,
+      descripcion: linea.descripcion ?? undefined,
+      fechaActivacion: linea.fechaActivacion ?? undefined,
+      fechaVencimientoPlan: linea.fechaVencimientoPlan ?? undefined
+    };
   }
 }

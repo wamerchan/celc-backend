@@ -6,31 +6,57 @@ export class AsignacionesService {
   constructor(private databaseService: DatabaseService) {}
 
   async findAll() {
-    const sql = 'SELECT * FROM Asignaciones';
-    return this.databaseService.query(sql);
+    return this.databaseService.asignacion.findMany({
+      include: {
+        usuario: true,
+        equipo: true,
+        linea: true
+      }
+    });
   }
 
   async findById(id: number) {
-    const sql = 'SELECT * FROM Asignaciones WHERE id = ?';
-    const asignaciones = await this.databaseService.query(sql, [id]);
-    return asignaciones[0] || null;
+    return this.databaseService.asignacion.findUnique({
+      where: { id },
+      include: {
+        usuario: true,
+        equipo: true,
+        linea: true
+      }
+    });
   }
 
   async create(data: any) {
-    const sql = 'INSERT INTO Asignaciones (id_usuario, id_equipo, id_linea, fecha_asignacion) VALUES (?, ?, ?, NOW())';
-    const result = await this.databaseService.query(sql, [data.id_usuario, data.id_equipo, data.id_linea]);
-    return { id: (result as any).insertId };
+    const asignacion = await this.databaseService.asignacion.create({
+      data: {
+        usuarioId: data.id_usuario,
+        equipoId: data.id_equipo,
+        lineaId: data.id_linea,
+        fechaAsignacion: new Date(),
+        observaciones: data.observaciones
+      }
+    });
+    return { id: asignacion.id };
   }
 
   async update(id: number, data: any) {
-    const sql = 'UPDATE Asignaciones SET id_usuario = ?, id_equipo = ?, id_linea = ?, fecha_desasignacion = ? WHERE id = ?';
-    await this.databaseService.query(sql, [data.id_usuario, data.id_equipo, data.id_linea, data.fecha_desasignacion, id]);
+    await this.databaseService.asignacion.update({
+      where: { id },
+      data: {
+        usuarioId: data.id_usuario,
+        equipoId: data.id_equipo,
+        lineaId: data.id_linea,
+        fechaDesasignacion: data.fecha_desasignacion ? new Date(data.fecha_desasignacion) : null,
+        observaciones: data.observaciones
+      }
+    });
     return this.findById(id);
   }
 
   async delete(id: number) {
-    const sql = 'DELETE FROM Asignaciones WHERE id = ?';
-    await this.databaseService.query(sql, [id]);
+    await this.databaseService.asignacion.delete({
+      where: { id }
+    });
     return { message: 'Asignación eliminada' };
   }
 }

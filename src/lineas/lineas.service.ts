@@ -1,73 +1,70 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { DatabaseService } from '../database/database.service';
+import { LineasEstado } from '@prisma/client';
 
 @Injectable()
 export class LineasService {
   constructor(private databaseService: DatabaseService) {}
 
   async findAll() {
-    const sql = `
-      SELECT 
-        id_linea AS id,
-        numero_telefono AS numero,
-        operador,
-        plan_datos AS plan,
-        estado,
-        fecha_activacion,
-        fecha_vencimiento_plan,
-        descripcion
-      FROM Lineas
-    `;
-    return this.databaseService.query(sql);
+    return this.databaseService.linea.findMany();
   }
 
   async findById(id: number) {
-    const sql = `
-      SELECT 
-        id_linea AS id,
-        numero_telefono AS numero,
-        operador,
-        plan_datos AS plan,
-        estado,
-        fecha_activacion,
-        fecha_vencimiento_plan,
-        descripcion
-      FROM Lineas 
-      WHERE id_linea = ?
-    `;
-    const lineas = await this.databaseService.query(sql, [id]);
-    return lineas[0] || null;
+    return this.databaseService.linea.findUnique({
+      where: { id }
+    });
   }
 
   async create(data: any) {
-    const sql = 'INSERT INTO Lineas (numero_telefono, operador, plan_datos, estado, fecha_activacion) VALUES (?, ?, ?, ?, NOW())';
-    const result = await this.databaseService.query(sql, [data.numero, data.operador, data.plan, data.estado]);
-    return { id: (result as any).insertId };
+    const linea = await this.databaseService.linea.create({
+      data: {
+        numeroTelefono: data.numeroTelefono,
+        operador: data.operador,
+        planDatos: data.planDatos,
+        estado: data.estado || LineasEstado.Activa,
+        fechaActivacion: data.fechaActivacion ? new Date(data.fechaActivacion) : new Date(),
+        fechaVencimientoPlan: data.fechaVencimientoPlan ? new Date(data.fechaVencimientoPlan) : undefined,
+        descripcion: data.descripcion
+      }
+    });
+    return { id: linea.id };
   }
 
   async update(id: number, data: any) {
-    const sql = 'UPDATE Lineas SET numero_telefono = ?, operador = ?, plan_datos = ?, estado = ? WHERE id_linea = ?';
-    await this.databaseService.query(sql, [data.numero, data.operador, data.plan, data.estado, id]);
+    await this.databaseService.linea.update({
+      where: { id },
+      data: {
+        numeroTelefono: data.numeroTelefono,
+        operador: data.operador,
+        planDatos: data.planDatos,
+        estado: data.estado,
+        fechaActivacion: data.fechaActivacion ? new Date(data.fechaActivacion) : undefined,
+        fechaVencimientoPlan: data.fechaVencimientoPlan ? new Date(data.fechaVencimientoPlan) : undefined,
+        descripcion: data.descripcion
+      }
+    });
     return this.findById(id);
   }
 
   async delete(id: number) {
-    const sql = 'DELETE FROM Lineas WHERE id_linea = ?';
-    await this.databaseService.query(sql, [id]);
+    await this.databaseService.linea.delete({
+      where: { id }
+    });
     return { message: 'Línea eliminada' };
   }
 
-  // Método para cambiar el estado de una línea entre Activa e Inactiva - 20 de octubre de 2025 - WM Developer
   async toggleStatus(id: number): Promise<any> {
-    const linea: any = await this.findById(id);
+    const linea = await this.findById(id);
     if (!linea) {
-      throw new Error('Línea no encontrada');
+      throw new NotFoundException('Línea no encontrada');
     }
 
-    // Cambia el estado: si es 'Activa', pasa a 'Inactiva' y viceversa
-    const nuevoEstado = linea.estado === 'Activa' ? 'Inactiva' : 'Activa';
-    const sql = 'UPDATE Lineas SET estado = ? WHERE id_linea = ?';
-    await this.databaseService.query(sql, [nuevoEstado, id]);
+    const nuevoEstado = linea.estado === LineasEstado.Activa ? LineasEstado.Inactiva : LineasEstado.Activa;
+    await this.databaseService.linea.update({
+      where: { id },
+      data: { estado: nuevoEstado }
+    });
 
     return this.findById(id);
   }

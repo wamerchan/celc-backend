@@ -98,5 +98,5 @@ export class UsuarioResponseDto {
     description: 'Último login del usuario',
     example: '2023-10-08T15:30:00Z',
   })
-  ultimo_login?: Date;
+  ultimo_login?: Date | null;
 }

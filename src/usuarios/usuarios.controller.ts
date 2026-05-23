@@ -21,7 +21,14 @@ export class UsuariosController {
   async findAll(): Promise<UsuarioResponseDto[]> {
     try {
       const result = await this.usuariosService.findAll();
-      return result;
+      return result.map(u => ({
+        id: u.id,
+        nombre: u.nombre,
+        email: u.email,
+        id_rol: u.id_rol,
+        fecha_creacion: u.fecha_creacion,
+        ultimo_login: u.ultimo_login ?? undefined
+      }));
     } catch (error) {
       console.error('Error in findAll:', error);
       throw error;
@@ -35,7 +42,16 @@ export class UsuariosController {
   @ApiResponse({ status: 404, description: 'Usuario no encontrado' })
   @ApiResponse({ status: 401, description: 'No autorizado' })
   async findById(@Param('id') id: string): Promise<UsuarioResponseDto | null> {
-    return this.usuariosService.findById(+id);
+    const u = await this.usuariosService.findById(+id);
+    if (!u) return null;
+    return {
+      id: u.id,
+      nombre: u.nombre,
+      email: u.email,
+      id_rol: u.id_rol,
+      fecha_creacion: u.fecha_creacion,
+      ultimo_login: u.ultimo_login ?? undefined
+    };
   }
 
   @Post()
