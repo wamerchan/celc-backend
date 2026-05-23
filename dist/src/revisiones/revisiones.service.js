@@ -37,25 +37,27 @@ let RevisionesService = class RevisionesService {
     async create(data) {
         const revision = await this.databaseService.revision.create({
             data: {
-                equipoId: data.id_equipo,
-                realizadaPorUsuario: data.id_tecnico,
-                fechaProgramada: new Date(data.fecha_programada),
-                resultado: data.estado || undefined,
-                observaciones: data.resultados || undefined
+                equipoId: data.equipoId ?? data.id_equipo,
+                realizadaPorUsuario: data.realizadaPorUsuario ?? data.id_tecnico,
+                fechaProgramada: new Date(data.fechaProgramada ?? data.fecha_programada),
+                resultado: data.resultado ?? data.estado ?? undefined,
+                observaciones: data.observaciones ?? data.resultados ?? undefined
             }
         });
         return { id: revision.id };
     }
     async update(id, data) {
+        const dateProgramada = data.fechaProgramada ?? data.fecha_programada;
+        const dateRealizada = data.fechaRealizada ?? data.fecha_realizada;
         await this.databaseService.revision.update({
             where: { id },
             data: {
-                equipoId: data.id_equipo,
-                realizadaPorUsuario: data.id_tecnico,
-                fechaProgramada: data.fecha_programada ? new Date(data.fecha_programada) : undefined,
-                fechaRealizada: data.fecha_realizada ? new Date(data.fecha_realizada) : undefined,
-                resultado: data.estado || undefined,
-                observaciones: data.resultados || undefined
+                equipoId: data.equipoId ?? data.id_equipo,
+                realizadaPorUsuario: data.realizadaPorUsuario ?? data.id_tecnico,
+                fechaProgramada: dateProgramada ? new Date(dateProgramada) : undefined,
+                fechaRealizada: dateRealizada ? new Date(dateRealizada) : undefined,
+                resultado: data.resultado ?? data.estado ?? undefined,
+                observaciones: data.observaciones ?? data.resultados ?? undefined
             }
         });
         return this.findById(id);

@@ -5,67 +5,67 @@ export declare class RevisionesController {
     findAll(): Promise<({
         equipo: {
             id: number;
-            descripcion: string | null;
-            estado: import("@prisma/client").$Enums.EquiposEstado | null;
             marca: string;
             modelo: string;
             numeroSerie: string;
             imei: string | null;
+            estado: import("@prisma/client").$Enums.EquiposEstado | null;
             fechaAdquisicion: Date | null;
+            descripcion: string | null;
         };
         usuario: {
+            id: number;
             nombres: string;
             apellidos: string;
             cedula: string;
             fechaNacimiento: Date | null;
             correoElectronico: string;
             contrasenaHash: string;
+            rolId: number;
             fechaCreacion: Date;
             ultimoLogin: Date | null;
             activo: boolean | null;
-            id: number;
-            rolId: number;
         } | null;
     } & {
         id: number;
         equipoId: number;
-        observaciones: string | null;
         fechaProgramada: Date;
         fechaRealizada: Date | null;
         resultado: import("@prisma/client").$Enums.RevisionesResultado | null;
+        observaciones: string | null;
         realizadaPorUsuario: number | null;
     })[]>;
     findById(id: string): Promise<({
         equipo: {
             id: number;
-            descripcion: string | null;
-            estado: import("@prisma/client").$Enums.EquiposEstado | null;
             marca: string;
             modelo: string;
             numeroSerie: string;
             imei: string | null;
+            estado: import("@prisma/client").$Enums.EquiposEstado | null;
             fechaAdquisicion: Date | null;
+            descripcion: string | null;
         };
         usuario: {
+            id: number;
             nombres: string;
             apellidos: string;
             cedula: string;
             fechaNacimiento: Date | null;
             correoElectronico: string;
             contrasenaHash: string;
+            rolId: number;
             fechaCreacion: Date;
             ultimoLogin: Date | null;
             activo: boolean | null;
-            id: number;
-            rolId: number;
         } | null;
     } & {
         id: number;
         equipoId: number;
-        observaciones: string | null;
         fechaProgramada: Date;
         fechaRealizada: Date | null;
         resultado: import("@prisma/client").$Enums.RevisionesResultado | null;
+        observaciones: string | null;
         realizadaPorUsuario: number | null;
     }) | null>;
     create(body: any): Promise<{
@@ -74,34 +74,34 @@ export declare class RevisionesController {
     update(id: string, body: any): Promise<({
         equipo: {
             id: number;
-            descripcion: string | null;
-            estado: import("@prisma/client").$Enums.EquiposEstado | null;
             marca: string;
             modelo: string;
             numeroSerie: string;
             imei: string | null;
+            estado: import("@prisma/client").$Enums.EquiposEstado | null;
             fechaAdquisicion: Date | null;
+            descripcion: string | null;
         };
         usuario: {
+            id: number;
             nombres: string;
             apellidos: string;
             cedula: string;
             fechaNacimiento: Date | null;
             correoElectronico: string;
             contrasenaHash: string;
+            rolId: number;
             fechaCreacion: Date;
             ultimoLogin: Date | null;
             activo: boolean | null;
-            id: number;
-            rolId: number;
         } | null;
     } & {
         id: number;
         equipoId: number;
-        observaciones: string | null;
         fechaProgramada: Date;
         fechaRealizada: Date | null;
         resultado: import("@prisma/client").$Enums.RevisionesResultado | null;
+        observaciones: string | null;
         realizadaPorUsuario: number | null;
     }) | null>;
 }

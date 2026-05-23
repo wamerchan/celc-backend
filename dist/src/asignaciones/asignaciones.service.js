@@ -39,9 +39,9 @@ let AsignacionesService = class AsignacionesService {
     async create(data) {
         const asignacion = await this.databaseService.asignacion.create({
             data: {
-                usuarioId: data.id_usuario,
-                equipoId: data.id_equipo,
-                lineaId: data.id_linea,
+                usuarioId: data.usuarioId ?? data.id_usuario,
+                equipoId: data.equipoId !== undefined ? data.equipoId : data.id_equipo,
+                lineaId: data.lineaId !== undefined ? data.lineaId : data.id_linea,
                 fechaAsignacion: new Date(),
                 observaciones: data.observaciones
             }
@@ -52,9 +52,9 @@ let AsignacionesService = class AsignacionesService {
         await this.databaseService.asignacion.update({
             where: { id },
             data: {
-                usuarioId: data.id_usuario,
-                equipoId: data.id_equipo,
-                lineaId: data.id_linea,
+                usuarioId: data.usuarioId ?? data.id_usuario,
+                equipoId: data.equipoId !== undefined ? data.equipoId : data.id_equipo,
+                lineaId: data.lineaId !== undefined ? data.lineaId : data.id_linea,
                 fechaDesasignacion: data.fecha_desasignacion ? new Date(data.fecha_desasignacion) : null,
                 observaciones: data.observaciones
             }
