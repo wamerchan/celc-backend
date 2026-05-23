@@ -15,17 +15,29 @@ export declare class MetricasService {
         label: string;
     }>;
     getDashboardStats(): Promise<{
-        activeLines: {
-            total: number;
-            label: string;
-        };
-        equipmentsInRepair: {
-            total: number;
-            label: string;
-        };
-        upcomingReviews: {
-            total: number;
-            label: string;
-        };
+        totalEquipos: number;
+        equiposDisponibles: number;
+        equiposAsignados: number;
+        equiposEnMantenimiento: number;
+        totalLineas: number;
+        lineasActivas: number;
+        totalAsignaciones: number;
+        revisionesProximas: number;
+        equiposPorEstado: {
+            estado: string;
+            count: number;
+        }[];
+        lineasPorOperador: {
+            operador: string;
+            count: number;
+        }[];
+        revisionesPorMes: {
+            mes: string;
+            count: number;
+        }[];
+        topMarcas: {
+            marca: string;
+            count: number;
+        }[];
     }>;
 }
