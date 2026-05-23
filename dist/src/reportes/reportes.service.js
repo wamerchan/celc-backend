@@ -19,32 +19,53 @@ let ReportesService = class ReportesService {
     }
     async getLineasReport(filters) {
         const where = {};
+        const dateDesde = filters.startDate ?? filters.fecha_desde;
+        const dateHasta = filters.endDate ?? filters.fecha_hasta;
         if (filters.estado) {
             where.estado = filters.estado;
         }
-        if (filters.fecha_desde) {
-            where.fechaActivacion = { ...where.fechaActivacion, gte: new Date(filters.fecha_desde) };
+        if (dateDesde) {
+            where.fechaActivacion = { ...where.fechaActivacion, gte: new Date(dateDesde) };
         }
-        if (filters.fecha_hasta) {
-            where.fechaActivacion = { ...where.fechaActivacion, lte: new Date(filters.fecha_hasta) };
+        if (dateHasta) {
+            where.fechaActivacion = { ...where.fechaActivacion, lte: new Date(dateHasta) };
         }
-        return this.databaseService.linea.findMany({ where });
+        return this.databaseService.linea.findMany({
+            where,
+            include: {
+                asignaciones: {
+                    where: { fechaDesasignacion: null },
+                    include: { usuario: true }
+                }
+            }
+        });
     }
     async getEquiposReport(filters) {
         const where = {};
+        const dateDesde = filters.startDate ?? filters.fecha_desde;
+        const dateHasta = filters.endDate ?? filters.fecha_hasta;
         if (filters.estado) {
             where.estado = filters.estado;
         }
-        if (filters.fecha_desde) {
-            where.fechaAdquisicion = { ...where.fechaAdquisicion, gte: new Date(filters.fecha_desde) };
+        if (dateDesde) {
+            where.fechaAdquisicion = { ...where.fechaAdquisicion, gte: new Date(dateDesde) };
         }
-        if (filters.fecha_hasta) {
-            where.fechaAdquisicion = { ...where.fechaAdquisicion, lte: new Date(filters.fecha_hasta) };
+        if (dateHasta) {
+            where.fechaAdquisicion = { ...where.fechaAdquisicion, lte: new Date(dateHasta) };
         }
-        return this.databaseService.equipo.findMany({ where });
+        return this.databaseService.equipo.findMany({
+            where,
+            include: {
+                revisiones: {
+                    orderBy: { fechaProgramada: 'desc' }
+                }
+            }
+        });
     }
     async getAsignacionesReport(filters) {
         const where = {};
+        const dateDesde = filters.startDate ?? filters.fecha_desde;
+        const dateHasta = filters.endDate ?? filters.fecha_hasta;
         if (filters.id_usuario) {
             where.usuarioId = Number(filters.id_usuario);
         }
@@ -54,13 +75,20 @@ let ReportesService = class ReportesService {
         if (filters.id_linea) {
             where.lineaId = Number(filters.id_linea);
         }
-        if (filters.fecha_desde) {
-            where.fechaAsignacion = { ...where.fechaAsignacion, gte: new Date(filters.fecha_desde) };
+        if (dateDesde) {
+            where.fechaAsignacion = { ...where.fechaAsignacion, gte: new Date(dateDesde) };
         }
-        if (filters.fecha_hasta) {
-            where.fechaAsignacion = { ...where.fechaAsignacion, lte: new Date(filters.fecha_hasta) };
+        if (dateHasta) {
+            where.fechaAsignacion = { ...where.fechaAsignacion, lte: new Date(dateHasta) };
         }
-        return this.databaseService.asignacion.findMany({ where });
+        return this.databaseService.asignacion.findMany({
+            where,
+            include: {
+                usuario: true,
+                equipo: true,
+                linea: true
+            }
+        });
     }
 };
 exports.ReportesService = ReportesService;
