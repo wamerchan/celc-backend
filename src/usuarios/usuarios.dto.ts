@@ -26,6 +26,22 @@ export class CreateUsuarioDto {
   @MinLength(6)
   password: string;
 
+  @ApiPropertyOptional({
+    description: 'Apellidos del usuario',
+    example: 'González',
+  })
+  @IsOptional()
+  @IsString()
+  apellidos?: string;
+
+  @ApiPropertyOptional({
+    description: 'Cédula del usuario',
+    example: '123456789',
+  })
+  @IsOptional()
+  @IsString()
+  cedula?: string;
+
   @ApiProperty({
     description: 'ID del rol del usuario (1: Administrador, 2: Técnico)',
     example: 2,
@@ -44,6 +60,22 @@ export class UpdateUsuarioDto {
   @IsString()
   @IsNotEmpty()
   nombre?: string;
+
+  @ApiPropertyOptional({
+    description: 'Apellidos del usuario',
+    example: 'González',
+  })
+  @IsOptional()
+  @IsString()
+  apellidos?: string;
+
+  @ApiPropertyOptional({
+    description: 'Cédula del usuario',
+    example: '123456789',
+  })
+  @IsOptional()
+  @IsString()
+  cedula?: string;
 
   @ApiPropertyOptional({
     description: 'Correo electrónico del usuario',
@@ -81,6 +113,24 @@ export class UsuarioResponseDto {
     example: 'maria.gonzalez@empresa.com',
   })
   email: string;
+
+  @ApiProperty({
+    description: 'Nombres del usuario',
+    example: 'María',
+  })
+  nombres: string;
+
+  @ApiProperty({
+    description: 'Apellidos del usuario',
+    example: 'González',
+  })
+  apellidos: string;
+
+  @ApiProperty({
+    description: 'Rol del usuario',
+    example: 'Administrador',
+  })
+  rol: string;
 
   @ApiProperty({
     description: 'ID del rol del usuario',

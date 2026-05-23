@@ -16,6 +16,8 @@ class CreateUsuarioDto {
     nombre;
     email;
     password;
+    apellidos;
+    cedula;
     id_rol;
 }
 exports.CreateUsuarioDto = CreateUsuarioDto;
@@ -47,6 +49,24 @@ __decorate([
     __metadata("design:type", String)
 ], CreateUsuarioDto.prototype, "password", void 0);
 __decorate([
+    (0, swagger_1.ApiPropertyOptional)({
+        description: 'Apellidos del usuario',
+        example: 'González',
+    }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], CreateUsuarioDto.prototype, "apellidos", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({
+        description: 'Cédula del usuario',
+        example: '123456789',
+    }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], CreateUsuarioDto.prototype, "cedula", void 0);
+__decorate([
     (0, swagger_1.ApiProperty)({
         description: 'ID del rol del usuario (1: Administrador, 2: Técnico)',
         example: 2,
@@ -57,6 +77,8 @@ __decorate([
 ], CreateUsuarioDto.prototype, "id_rol", void 0);
 class UpdateUsuarioDto {
     nombre;
+    apellidos;
+    cedula;
     email;
     id_rol;
 }
@@ -71,6 +93,24 @@ __decorate([
     (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", String)
 ], UpdateUsuarioDto.prototype, "nombre", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({
+        description: 'Apellidos del usuario',
+        example: 'González',
+    }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], UpdateUsuarioDto.prototype, "apellidos", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({
+        description: 'Cédula del usuario',
+        example: '123456789',
+    }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], UpdateUsuarioDto.prototype, "cedula", void 0);
 __decorate([
     (0, swagger_1.ApiPropertyOptional)({
         description: 'Correo electrónico del usuario',
@@ -94,6 +134,9 @@ class UsuarioResponseDto {
     id;
     nombre;
     email;
+    nombres;
+    apellidos;
+    rol;
     id_rol;
     fecha_creacion;
     ultimo_login;
@@ -120,6 +163,27 @@ __decorate([
     }),
     __metadata("design:type", String)
 ], UsuarioResponseDto.prototype, "email", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({
+        description: 'Nombres del usuario',
+        example: 'María',
+    }),
+    __metadata("design:type", String)
+], UsuarioResponseDto.prototype, "nombres", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({
+        description: 'Apellidos del usuario',
+        example: 'González',
+    }),
+    __metadata("design:type", String)
+], UsuarioResponseDto.prototype, "apellidos", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({
+        description: 'Rol del usuario',
+        example: 'Administrador',
+    }),
+    __metadata("design:type", String)
+], UsuarioResponseDto.prototype, "rol", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({
         description: 'ID del rol del usuario',

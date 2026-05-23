@@ -113,6 +113,8 @@ let UsuariosService = class UsuariosService {
             updateData.correoElectronico = data.email;
         if (data.id_rol)
             updateData.rolId = data.id_rol;
+        if (data.cedula)
+            updateData.cedula = data.cedula;
         if (Object.keys(updateData).length === 0)
             return null;
         await this.databaseService.usuario.update({

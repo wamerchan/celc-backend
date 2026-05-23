@@ -61,12 +61,13 @@ export class UsuariosService {
     return { id: user.id };
   }
 
-  async update(id: number, data: Partial<{ nombre: string; apellidos: string; email: string; id_rol: number }>) {
+  async update(id: number, data: Partial<{ nombre: string; apellidos: string; email: string; id_rol: number; cedula: string }>) {
     const updateData: any = {};
     if (data.nombre) updateData.nombres = data.nombre;
     if (data.apellidos) updateData.apellidos = data.apellidos;
     if (data.email) updateData.correoElectronico = data.email;
     if (data.id_rol) updateData.rolId = data.id_rol;
+    if (data.cedula) updateData.cedula = data.cedula;
 
     if (Object.keys(updateData).length === 0) return null;
 

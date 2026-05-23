@@ -24,8 +24,11 @@ export class UsuariosController {
       return result.map(u => ({
         id: u.id,
         nombre: u.nombre,
+        nombres: u.nombres,
+        apellidos: u.apellidos,
         email: u.email,
         id_rol: u.id_rol,
+        rol: u.rol,
         fecha_creacion: u.fecha_creacion,
         ultimo_login: u.ultimo_login ?? undefined
       }));
@@ -47,8 +50,11 @@ export class UsuariosController {
     return {
       id: u.id,
       nombre: u.nombre,
+      nombres: u.nombres,
+      apellidos: u.apellidos,
       email: u.email,
       id_rol: u.id_rol,
+      rol: u.rol,
       fecha_creacion: u.fecha_creacion,
       ultimo_login: u.ultimo_login ?? undefined
     };

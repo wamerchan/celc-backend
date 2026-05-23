@@ -39,6 +39,7 @@ export declare class UsuariosService {
         apellidos: string;
         email: string;
         id_rol: number;
+        cedula: string;
     }>): Promise<{
         id: number;
         nombre: string;
