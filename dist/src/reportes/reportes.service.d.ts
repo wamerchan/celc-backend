@@ -5,36 +5,36 @@ export declare class ReportesService {
     getLineasReport(filters: any): Promise<({
         asignaciones: ({
             usuario: {
-                id: number;
                 nombres: string;
                 apellidos: string;
                 cedula: string;
                 fechaNacimiento: Date | null;
                 correoElectronico: string;
                 contrasenaHash: string;
-                rolId: number;
                 fechaCreacion: Date;
                 ultimoLogin: Date | null;
                 activo: boolean | null;
+                id: number;
+                rolId: number;
             };
         } & {
             id: number;
-            fechaDesasignacion: Date | null;
             usuarioId: number;
             equipoId: number | null;
             lineaId: number | null;
             fechaAsignacion: Date;
+            fechaDesasignacion: Date | null;
             observaciones: string | null;
         })[];
     } & {
         id: number;
+        descripcion: string | null;
         numeroTelefono: string;
         operador: string;
         planDatos: string | null;
         estado: import("@prisma/client").$Enums.LineasEstado | null;
         fechaActivacion: Date | null;
         fechaVencimientoPlan: Date | null;
-        descripcion: string | null;
     })[]>;
     getEquiposReport(filters: any): Promise<({
         revisiones: {
@@ -48,8 +48,8 @@ export declare class ReportesService {
         }[];
     } & {
         id: number;
-        estado: import("@prisma/client").$Enums.EquiposEstado | null;
         descripcion: string | null;
+        estado: import("@prisma/client").$Enums.EquiposEstado | null;
         marca: string;
         modelo: string;
         numeroSerie: string;
@@ -57,46 +57,46 @@ export declare class ReportesService {
         fechaAdquisicion: Date | null;
     })[]>;
     getAsignacionesReport(filters: any): Promise<({
-        linea: {
-            id: number;
-            numeroTelefono: string;
-            operador: string;
-            planDatos: string | null;
-            estado: import("@prisma/client").$Enums.LineasEstado | null;
-            fechaActivacion: Date | null;
-            fechaVencimientoPlan: Date | null;
-            descripcion: string | null;
-        } | null;
-        usuario: {
-            id: number;
-            nombres: string;
-            apellidos: string;
-            cedula: string;
-            fechaNacimiento: Date | null;
-            correoElectronico: string;
-            contrasenaHash: string;
-            rolId: number;
-            fechaCreacion: Date;
-            ultimoLogin: Date | null;
-            activo: boolean | null;
-        };
         equipo: {
             id: number;
-            estado: import("@prisma/client").$Enums.EquiposEstado | null;
             descripcion: string | null;
+            estado: import("@prisma/client").$Enums.EquiposEstado | null;
             marca: string;
             modelo: string;
             numeroSerie: string;
             imei: string | null;
             fechaAdquisicion: Date | null;
         } | null;
+        linea: {
+            id: number;
+            descripcion: string | null;
+            numeroTelefono: string;
+            operador: string;
+            planDatos: string | null;
+            estado: import("@prisma/client").$Enums.LineasEstado | null;
+            fechaActivacion: Date | null;
+            fechaVencimientoPlan: Date | null;
+        } | null;
+        usuario: {
+            nombres: string;
+            apellidos: string;
+            cedula: string;
+            fechaNacimiento: Date | null;
+            correoElectronico: string;
+            contrasenaHash: string;
+            fechaCreacion: Date;
+            ultimoLogin: Date | null;
+            activo: boolean | null;
+            id: number;
+            rolId: number;
+        };
     } & {
         id: number;
-        fechaDesasignacion: Date | null;
         usuarioId: number;
         equipoId: number | null;
         lineaId: number | null;
         fechaAsignacion: Date;
+        fechaDesasignacion: Date | null;
         observaciones: string | null;
     })[]>;
 }
