@@ -14,7 +14,11 @@ async function bootstrap() {
   // Helmet for secure HTTP headers
   app.use(helmet());
   
-  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(new ValidationPipe({
+    whitelist: true,
+    forbidNonWhitelisted: true,
+    transform: true,
+  }));
   
   // Configuración de CORS
   app.enableCors({
