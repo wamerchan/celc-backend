@@ -11,6 +11,7 @@ import { AsignacionesModule } from './asignaciones/asignaciones.module';
 import { RevisionesModule } from './revisiones/revisiones.module';
 import { ReportesModule } from './reportes/reportes.module';
 import { MetricasModule } from './metricas/metricas.module';
+import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
 
 @Module({
   imports: [
@@ -26,8 +27,20 @@ import { MetricasModule } from './metricas/metricas.module';
     RevisionesModule,
     ReportesModule,
     MetricasModule,
+    ThrottlerModule.forRoot([
+      {
+        ttl: 60000,
+        limit: 100,
+      },
+    ]),
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
+    },
+  ],
 })
 export class AppModule {}
