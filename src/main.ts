@@ -3,12 +3,16 @@ import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import { AllExceptionsFilter } from './common/http-exception.filter';
+import * as helmet from 'helmet';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   
   // Global exception filter
   app.useGlobalFilters(new AllExceptionsFilter());
+  
+  // Helmet for secure HTTP headers
+  app.use(helmet());
   
   app.useGlobalPipes(new ValidationPipe());
   
