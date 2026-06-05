@@ -1,98 +1,244 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# CELC Backend — API REST de Gestión de Telecomunicaciones
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+API RESTful para el **Sistema de Control de Equipos y Líneas de Comunicación (CELC)**, construida con **NestJS 11**, **Prisma ORM** y **MariaDB**.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+---
 
-## Description
+## 📋 Descripción
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+Backend modular que expone una API REST para la gestión integral de líneas celulares, equipos terminales, asignaciones a usuarios, revisiones técnicas, reportes y métricas. Incluye autenticación JWT con control de roles, documentación Swagger/OpenAPI, rate limiting y seguridad reforzada con Helmet.
 
-## Project setup
+### Funcionalidades principales
 
-```bash
-$ npm install
+- 👤 Gestión de usuarios con roles (Administrador, Técnico, Empleado)
+- 📱 CRUD de líneas telefónicas con cambio de estado
+- 🔧 CRUD de equipos terminales
+- 📋 Asignación de equipos/líneas a usuarios
+- 🔍 Revisiones y mantenimiento de equipos
+- 📊 Dashboard con métricas en tiempo real
+- 📈 Reportes exportables
+- 🔐 Autenticación JWT + guards de roles
+- 📖 Documentación interactiva Swagger en `/api`
+
+---
+
+## 🛠️ Stack Tecnológico
+
+| Categoría            | Tecnología                        | Versión |
+| -------------------- | --------------------------------- | ------- |
+| **Runtime**          | Node.js                           | ≥18     |
+| **Lenguaje**         | TypeScript                        | ~5.7    |
+| **Framework**        | NestJS                            | ^11.0   |
+| **ORM**              | Prisma                            | ^7.8    |
+| **Base de datos**    | MariaDB (via `@prisma/adapter-mariadb`) | — |
+| **Autenticación**    | Passport + JWT + bcrypt           | —       |
+| **Documentación**    | Swagger / OpenAPI (`@nestjs/swagger`) | ^11.2 |
+| **Seguridad**        | Helmet + CORS + Throttler         | —       |
+| **Validación**       | class-validator + class-transformer | —     |
+| **Configuración**    | @nestjs/config + dotenv           | —       |
+| **Testing**          | Jest + Supertest + ts-jest        | —       |
+| **Gestor paquetes**  | pnpm                              | —       |
+
+---
+
+## 📁 Estructura del Proyecto
+
+```
+celc-backend/
+├── prisma/
+│   └── schema.prisma             # Schema BD: 7 modelos + 3 enums
+│
+├── src/
+│   ├── main.ts                   # Bootstrap: Swagger, CORS, Helmet, ValidationPipe
+│   ├── app.module.ts             # Módulo raíz (importa todos los módulos)
+│   ├── app.controller.ts         # Health check /
+│   ├── app.service.ts            # Servicio raíz
+│   │
+│   ├── auth/                     # Autenticación y autorización
+│   │   ├── auth.module.ts
+│   │   ├── auth.controller.ts    # POST /api/auth/login, /register, /verify
+│   │   ├── auth.service.ts       # register, login, getProfile
+│   │   ├── auth.dto.ts           # RegisterDto, LoginDto
+│   │   ├── jwt.guard.ts          # Guard: valida token JWT
+│   │   ├── jwt.middleware.ts     # Middleware JWT (alternativa)
+│   │   ├── role.guard.ts         # Guard: verifica rol (Admin/Técnico/Empleado)
+│   │   └── user.interface.ts     # Interface del payload JWT
+│   │
+│   ├── usuarios/                 # CRUD de usuarios
+│   ├── lineas/                   # CRUD + toggle de líneas
+│   ├── equipos/                  # CRUD de equipos
+│   ├── asignaciones/             # CRUD de asignaciones
+│   ├── revisiones/               # CRUD de revisiones
+│   ├── reportes/                 # Reportes con filtros
+│   ├── metricas/                 # Métricas para dashboard
+│   ├── database/                 # DatabaseModule + DatabaseService (Prisma)
+│   └── common/                   # Filtro global de excepciones
+│
+├── test/                         # Tests E2E
+├── docs/                         # Documentación adicional
+├── .env                          # Variables de entorno
+├── package.json
+├── pnpm-workspace.yaml
+├── tsconfig.json
+├── eslint.config.mjs
+└── README.md
 ```
 
-## Compile and run the project
+---
+
+## 🚀 Instalación y Uso
+
+### Requisitos
+
+- Node.js 18+
+- pnpm 8+
+- MariaDB 10.6+
+
+### Instalación
 
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+cd celc-backend
+pnpm install
 ```
 
-## Run tests
+### Configurar entorno
+
+Crear archivo `.env` en la raíz:
+
+```env
+DATABASE_URL="mysql://usuario:password@localhost:3306/celc"
+JWT_SECRET="tu-secreto-jwt"
+JWT_EXPIRES_IN="8h"
+PORT=3001
+CORS_ORIGIN="http://localhost:5173"
+```
+
+### Inicializar base de datos
 
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+pnpm prisma:generate    # Generar Prisma Client
+pnpm prisma:push        # Sincronizar schema con la BD
 ```
 
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+### Desarrollo
 
 ```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+pnpm start:dev
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+Servidor en `http://localhost:3001` — Documentación Swagger en `http://localhost:3001/api`
 
-## Resources
+### Producción
 
-Check out a few resources that may come in handy when working with NestJS:
+```bash
+pnpm build
+pnpm start:prod
+```
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+---
 
-## Support
+## 📖 Documentación de la API (Swagger)
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+Una vez corriendo, la documentación interactiva está disponible en:
 
-## Stay in touch
+```
+http://localhost:3001/api
+```
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+Incluye todos los endpoints, schemas, y la opción de autenticarse con JWT directamente desde el UI (botón **Authorize**).
 
-## License
+---
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+## 🔐 Autenticación y Roles
+
+| Rol             | ID | Descripción                    |
+| --------------- | -- | ------------------------------ |
+| Administrador   | 1  | Acceso completo al sistema     |
+| Técnico         | 2  | Gestión de líneas y equipos    |
+| Empleado        | 3  | Consulta de asignaciones propia |
+
+### Endpoints de autenticación
+
+| Método | Ruta                | Auth | Descripción                    |
+| ------ | ------------------- | ---- | ------------------------------ |
+| POST   | `/api/auth/register` | ❌  | Registrar nuevo usuario        |
+| POST   | `/api/auth/login`    | ❌  | Iniciar sesión → obtiene JWT   |
+| GET    | `/api/auth/verify`   | ✅  | Verificar validez del token    |
+
+---
+
+## 📡 Endpoints de la API
+
+| Método | Ruta                               | Módulo       | Auth | Roles       |
+| ------ | ---------------------------------- | ------------ | ---- | ----------- |
+| GET    | `/api/usuarios`                    | Usuarios     | ✅   | Admin       |
+| GET    | `/api/usuarios/:id`                | Usuarios     | ✅   | —           |
+| POST   | `/api/usuarios`                    | Usuarios     | ✅   | Admin       |
+| PUT    | `/api/usuarios/:id`                | Usuarios     | ✅   | —           |
+| DELETE | `/api/usuarios/:id`                | Usuarios     | ✅   | Admin       |
+| GET    | `/api/lineas`                      | Líneas       | ✅   | —           |
+| GET    | `/api/lineas/:id`                  | Líneas       | ✅   | —           |
+| POST   | `/api/lineas`                      | Líneas       | ✅   | Admin/Téc   |
+| PUT    | `/api/lineas/:id`                  | Líneas       | ✅   | —           |
+| DELETE | `/api/lineas/:id`                  | Líneas       | ✅   | Admin/Téc   |
+| PUT    | `/api/lineas/:id/toggle`           | Líneas       | ✅   | Admin/Téc   |
+| GET    | `/api/equipos`                     | Equipos      | ✅   | —           |
+| GET    | `/api/equipos/:id`                 | Equipos      | ✅   | —           |
+| POST   | `/api/equipos`                     | Equipos      | ✅   | —           |
+| PUT    | `/api/equipos/:id`                 | Equipos      | ✅   | —           |
+| DELETE | `/api/equipos/:id`                 | Equipos      | ✅   | —           |
+| GET    | `/api/asignaciones`                | Asignaciones | ✅   | —           |
+| GET    | `/api/asignaciones/:id`            | Asignaciones | ✅   | —           |
+| POST   | `/api/asignaciones`                | Asignaciones | ✅   | —           |
+| PUT    | `/api/asignaciones/:id`            | Asignaciones | ✅   | —           |
+| DELETE | `/api/asignaciones/:id`            | Asignaciones | ✅   | —           |
+| GET    | `/api/revisiones`                  | Revisiones   | ✅   | —           |
+| GET    | `/api/revisiones/:id`              | Revisiones   | ✅   | —           |
+| POST   | `/api/revisiones`                  | Revisiones   | ✅   | —           |
+| PUT    | `/api/revisiones/:id`              | Revisiones   | ✅   | —           |
+| GET    | `/api/reportes/lineas`             | Reportes     | ✅   | —           |
+| GET    | `/api/reportes/equipos`            | Reportes     | ✅   | —           |
+| GET    | `/api/reportes/asignaciones`       | Reportes     | ✅   | —           |
+| GET    | `/api/metricas/dashboard`          | Métricas     | ✅   | —           |
+| GET    | `/api/metricas/lineas-activas`     | Métricas     | ✅   | —           |
+| GET    | `/api/metricas/equipos-reparacion` | Métricas     | ✅   | —           |
+| GET    | `/api/metricas/revisiones-proximas`| Métricas     | ✅   | —           |
+
+---
+
+## 🧪 Testing
+
+```bash
+# Tests unitarios
+pnpm test
+
+# Tests E2E
+pnpm test:e2e
+
+# Cobertura
+pnpm test:cov
+```
+
+---
+
+## 🗄️ Modelos de Base de Datos
+
+| Modelo          | Descripción                              |
+| --------------- | ---------------------------------------- |
+| `Usuario`       | Usuarios del sistema con roles           |
+| `Rol`           | Catálogo de roles (Admin, Técnico, Empleado) |
+| `Linea`         | Líneas telefónicas celulares             |
+| `Equipo`        | Equipos/terminales celulares             |
+| `Asignacion`    | Asignación de equipos/líneas a usuarios  |
+| `Revision`      | Revisiones programadas de equipos        |
+| `RegistroError` | Log de errores de la aplicación          |
+
+---
+
+## 📄 Licencia
+
+Proyecto privado — Sistema CELC.
+
+---
+
+**Última actualización**: 4 de junio de 2026

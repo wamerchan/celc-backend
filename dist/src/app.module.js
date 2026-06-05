@@ -8,6 +8,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AppModule = void 0;
 const common_1 = require("@nestjs/common");
+const core_1 = require("@nestjs/core");
 const config_1 = require("@nestjs/config");
 const app_controller_1 = require("./app.controller");
 const app_service_1 = require("./app.service");
@@ -20,6 +21,7 @@ const asignaciones_module_1 = require("./asignaciones/asignaciones.module");
 const revisiones_module_1 = require("./revisiones/revisiones.module");
 const reportes_module_1 = require("./reportes/reportes.module");
 const metricas_module_1 = require("./metricas/metricas.module");
+const throttler_1 = require("@nestjs/throttler");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -38,9 +40,21 @@ exports.AppModule = AppModule = __decorate([
             revisiones_module_1.RevisionesModule,
             reportes_module_1.ReportesModule,
             metricas_module_1.MetricasModule,
+            throttler_1.ThrottlerModule.forRoot([
+                {
+                    ttl: 60000,
+                    limit: 100,
+                },
+            ]),
         ],
         controllers: [app_controller_1.AppController],
-        providers: [app_service_1.AppService],
+        providers: [
+            app_service_1.AppService,
+            {
+                provide: core_1.APP_GUARD,
+                useClass: throttler_1.ThrottlerGuard,
+            },
+        ],
     })
 ], AppModule);
 //# sourceMappingURL=app.module.js.map
